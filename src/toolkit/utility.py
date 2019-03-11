@@ -1,14 +1,9 @@
-'''
-Created on Feb 1, 2013
-
-@author: xwang95
-'''
-import random;
-import os;
-import os.path;
-import sys;
-import shutil;
-import math;
+import random
+import os
+import os.path
+import sys
+import shutil
+import math
 
 NOT_FOLD = True;
 #===============================================================================
@@ -29,7 +24,7 @@ def getDictRank(dict, key, reverse=False):
         keyToRank[k] = r;
     return (rankToKey, keyToRank);
 
-NOT_FOLD = True;    
+NOT_FOLD = True;
 #===============================================================================
 # parse
 #===============================================================================
@@ -102,7 +97,7 @@ def printProgressBar(prog, step=0.04, addStr=""):
     return s;
 
 def rFillSpaces(s, lineWidth=300):
-    return str(s) + ''.join([' ' for i in range(lineWidth - len(s))]); 
+    return str(s) + ''.join([' ' for i in range(lineWidth - len(s))]);
 
 NOT_FOLD = True;
 #===============================================================================
@@ -139,14 +134,14 @@ def mkDir(path):
 
 NOT_FOLD = True;
 #===============================================================================
-# computing 
+# computing
 #===============================================================================
 def getVecNorm(vec, order): return math.pow(sum([math.pow(x, order) for x in vec]), 1.0 / order);
 
 def normalizeVector(vec, order=None):
-    if(order is not None): norm = getVecNorm(vec, order); 
+    if(order is not None): norm = getVecNorm(vec, order);
     else: norm = float(sum(vec));
-    return [x / norm for x in vec];    
+    return [x / norm for x in vec];
 
 def getDistExpectation(dist): return sum([k * dist[k] for k in dist]);
 
