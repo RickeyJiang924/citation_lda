@@ -7,7 +7,7 @@ cursor = db.cursor()
 # 获取引文
 sql = "SET session group_concat_max_len=18000"
 sql_1 = "SELECT * FROM final_info"
-f = open('E:\\bigdata\\PycharmWorkspace\\lda_project\\data\\test_metadata_file.txt', 'a+', encoding='utf-8')
+f = open('E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\test_metadata_file.txt', 'a+', encoding='utf-8')
 cursor.execute('SET NAMES UTF8')
 cursor.execute(sql)
 cursor.execute(sql_1)

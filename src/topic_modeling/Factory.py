@@ -181,18 +181,18 @@ def topicWeightGeneration(k):
 if __name__ == '__main__':
     factory = Factory()
     # print(randomNumberGeneration(10, 5))
-    factory.readCitationFile('E:\\bigdata\\PycharmWorkspace\\lda_project\\data\\test_citation_file.txt')
-    metadata_obj = factory.readMetadataFile('E:\\bigdata\\PycharmWorkspace\\lda_project\\data\\test_metadata_file.txt')
+    factory.readCitationFile('E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\test_citation_file.txt')
+    metadata_obj = factory.readMetadataFile('E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\test_metadata_file.txt')
     d = len(factory.corpus.docs)
-    k = 100
+    k = 10
     p_theta = randomNumberGeneration(d, k)
     p_phi = randomNumberGeneration(k, d)
     topic_weights = topicWeightGeneration(k)
     # print(factory.corpus.docs)
     dump(p_theta, p_phi, topic_weights, d, k,
-         'E:\\bigdata\\PycharmWorkspace\\lda_project\\data\\test_theta_file.txt',
-         'E:\\bigdata\\PycharmWorkspace\\lda_project\\data\\test_phi_file.txt',
-         'E:\\bigdata\\PycharmWorkspace\\lda_project\\data\\test_topic_weight_file.txt',
+         'E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\test_theta_file.txt',
+         'E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\test_phi_file.txt',
+         'E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\test_topic_weight_file.txt',
          factory.corpus)
 
 
