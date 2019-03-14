@@ -13,12 +13,15 @@ def filterTokLst(tokLst):
 # 输入str 返回list
 def jiebaTokenize(sentence):
     stopwords_file = open('E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\references\\stopwords.txt', 'r', encoding='utf-8')
+    eng_stopwords_file = open('E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\references\\eng_stopwords.txt', 'r',
+                          encoding='utf-8')
     stopwords = stopwords_file.read().split('\n')
+    eng_stopwords = eng_stopwords_file.read().split('\n')
     results = ' '.join(jieba.cut(sentence)).split(' ')
     result = []
     # print(results)
     for r in results:
-        if r not in stopwords:
+        if r not in stopwords and r not in eng_stopwords:
             result.append(r)
     # print(result)
     return result
@@ -63,12 +66,14 @@ def dumpTopicSummary(topicSummary, dumpFilePath):
     for k in sorted(topicSummary, key=lambda k:topicSummary[k][2], reverse=True):
         sys.stdout.write('\r[topic summary]: dump topic {0}'.format(k))
         sys.stdout.flush()
-        (topToks, venueDist, yearDist, topWei, topDocs, topVenues) = topicSummary[k]
+        (topToks, yearDist, topWei, topDocs) = topicSummary[k]
         dumpFile.write('[Topic: {0}]:{1:.6f}  year={2:.6f}({3:.6f})\n'.format(k, topWei, utility.getDistExpectation(yearDist),
                                                                               utility.getDistStd(yearDist)))
-        for topDoc in topDocs: dumpFile.write('Doc:{0:.6f}:[{1:^20}]:{2}\n'.format(topDoc[0], topDoc[1], topDoc[2]))
-        for topTok in topToks: dumpFile.write('Tok:{0:.6f}:{1}\n'.format(topTok[0], topTok[1]))
-        for topVenue in topVenues: dumpFile.write('Ven:{0:.6f}:{1}\n'.format(topVenue[0], topVenue[1]))
+        for topDoc in topDocs:
+            dumpFile.write('Doc:{0:.6f}:[{1:^20}]:{2}\n'.format(topDoc[0], topDoc[1], topDoc[2]))
+        for topTok in topToks:
+            dumpFile.write('Tok:{0:.6f}:{1}\n'.format(topTok[0], topTok[1]))
+        # for topVenue in topVenues: dumpFile.write('Ven:{0:.6f}:{1}\n'.format(topVenue[0], topVenue[1]))
         dumpFile.write('\n')
     print('')
     dumpFile.close()
@@ -79,8 +84,8 @@ def dumpShortTopicSummary(topicSummary, dumpFilePath):
     for k in sorted(topicSummary, key=lambda k:topicSummary[k][2], reverse=True):
         sys.stdout.write('\r[topic short summary]: dump topic {0}'.format(k))
         sys.stdout.flush()
-        (topToks, venueDist, yearDist, topWei, topDocs, topVenues) = topicSummary[k]
-        dumpFile.write('[Topic: {0}]:{1:.6f}  year={2:.2f}({3:.2f}) '.format(k, topWei, toolkit.utility.getDistExpectation(yearDist), toolkit.utility.getDistStd(yearDist)))
+        (topToks, yearDist, topWei, topDocs) = topicSummary[k]
+        dumpFile.write('[Topic: {0}]:{1:.6f}  year={2:.2f}({3:.2f}) '.format(k, topWei, utility.getDistExpectation(yearDist), utility.getDistStd(yearDist)))
         for topTok in topToks: dumpFile.write('{0} '.format(topTok[1]))
         dumpFile.write('\n')
     print('')
