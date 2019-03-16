@@ -5,6 +5,7 @@ import time
 import toolkit.utility
 import corpus.historics as historics
 
+
 class LDA(object):
     K = None
     D = None
@@ -389,7 +390,8 @@ def citationLdaRun(data, K, D, W, alpha, beta, burninTimeHr, sampliTimeHr, dumpF
     return postTheta, postPhi, topicWeights
 
 def historicsCitationLdaRun(K, BurninHr, SampliHr):
-    dumpFileFolder = 'E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\'
+    dumpFileFolder = 'E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\'
+    # dumpFileFolder = 'E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\'
     '''data loading'''
     print('[historics-citation-LDA]: loading historics')
     hc = historics.getHistoricsCorpus()
@@ -403,8 +405,9 @@ def historicsCitationLdaRun(K, BurninHr, SampliHr):
     '''running LDA'''
     (postTheta, postPhi, topicWeights) = citationLdaRun(data, K, D, D, 1e-6, 1e-6, BurninHr, SampliHr, dumpFileFolder)
 
+
 if __name__ == '__main__':
-    historicsCitationLdaRun(100, 0.1, 0.1)
+    historicsCitationLdaRun(50, 3.5, 3.5)
 
     
 

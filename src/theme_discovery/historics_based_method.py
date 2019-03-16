@@ -12,9 +12,13 @@ def filterTokLst(tokLst):
 
 # 输入str 返回list
 def jiebaTokenize(sentence):
-    stopwords_file = open('E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\references\\stopwords.txt', 'r', encoding='utf-8')
-    eng_stopwords_file = open('E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\references\\eng_stopwords.txt', 'r',
+    stopwords_file = open('E:\\study\\PycharmProjects\\lda_project\\citation_lda\\references\\stopwords.txt', 'r',
                           encoding='utf-8')
+    eng_stopwords_file = open('E:\\study\\PycharmProjects\\lda_project\\citation_lda\\references\\eng_stopwords.txt',
+                              'r', encoding='utf-8')
+    # stopwords_file = open('E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\references\\stopwords.txt', 'r', encoding='utf-8')
+    # eng_stopwords_file = open('E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\references\\eng_stopwords.txt', 'r',
+    #                       encoding='utf-8')
     stopwords = stopwords_file.read().split('\n')
     eng_stopwords = eng_stopwords_file.read().split('\n')
     results = ' '.join(jieba.cut(sentence)).split(' ')
@@ -93,7 +97,6 @@ def dumpShortTopicSummary(topicSummary, dumpFilePath):
 
 def historicsCitationLdaSummary(ldaFilePath):
     print('[historics-citation-LDA] loading lda')
-#    ldaFilePath = os.path.join(variables.RESULT_DIR, 'historics_citation_lda/historics_citation_lda_500_145317_145317_0.001_0.001_timeCtrl_10_10.lda')
     ldaInstance = lda.readLdaEstimateFile(ldaFilePath)
     print('[historics-citation-LDA] loading historics')
     hd = historics.getHistoricsCorpus()
@@ -106,11 +109,17 @@ def historicsCitationLdaSummary(ldaFilePath):
     # dumpShortTopicSummary(topicSummary, ldaFilePath + '_shortsummary')
     return
 
+
 if __name__ == '__main__':
     # 测试中文分词方法jieba
     # sentence = '我是一个顽童，上午学习历史'
     # print(jieba.lcut(sentence))
     # print(jiebaTokenize(sentence))
 
+    # lda.historicsCitationLdaRun(100, 2, 2)
     historicsCitationLdaSummary(
-        'E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\historics_citation_lda_100_46101_46101_1e-06_1e-06_timeCtrl_0.1_0.1.lda')
+        'E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\'
+        'historics_citation_lda_50_45895_45895_1e-06_1e-06_timeCtrl_3.5_3.5.lda')
+    # historicsCitationLdaSummary(
+    #     'E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\'
+    #     'historics_citation_lda_100_46101_46101_1e-06_1e-06_timeCtrl_0.1_0.1.lda')

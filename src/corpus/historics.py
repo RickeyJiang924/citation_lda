@@ -54,6 +54,7 @@ def readMetaFile(metaFilePath):
     metaFile = open(metaFilePath, 'r', encoding='utf-8')
     metaDict = {}
     eof = False
+    # excp = 0
     while not eof:
         (lines, eof) = toolkit.utility.readLines(5, metaFile)
         Hid = toolkit.utility.parseNumVal(toolkit.utility.rmLeadingStr(lines[0], 'id = '))
@@ -188,8 +189,12 @@ def generateCitFile(citationFilePath, citFilePath):
 # ===============================================================================
 # API
 # ===============================================================================
-def getHistoricsCorpus(metaDataFilePath='E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\test_metadata_file.txt',
-                    citFilePath='E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\test_citation_file.txt'):
+# def getHistoricsCorpus(metaDataFilePath='E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\test_metadata_file.txt',
+#                     citFilePath='E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\test_citation_file.txt'):
+#     return Historics(metaDataFilePath, citFilePath)
+
+def getHistoricsCorpus(metaDataFilePath='E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\test_metadata_file.txt',
+                    citFilePath='E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\test_citation_file.txt'):
     return Historics(metaDataFilePath, citFilePath)
 
 
