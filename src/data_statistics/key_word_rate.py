@@ -4,7 +4,7 @@ import pynlpir
 class KeyWordRate(object):
 
     def gengerate_KeyDict(self):
-        db = pymysql.connect("localhost", "root", "czc489622czc", "history")
+        db = pymysql.connect("localhost", "root", "", "history")
         cursor = db.cursor()
         cursor2 = db.cursor()
         sql = "SELECT SNO,LYPM,QKNO,NIAN FROM ci_lysy14770"
