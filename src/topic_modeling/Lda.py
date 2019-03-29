@@ -4,6 +4,7 @@ import sys
 import time
 import toolkit.utility
 import corpus.historics as historics
+import corpus.economics as economics
 
 
 class LDA(object):
@@ -406,8 +407,25 @@ def historicsCitationLdaRun(K, BurninHr, SampliHr):
     (postTheta, postPhi, topicWeights) = citationLdaRun(data, K, D, D, 1e-6, 1e-6, BurninHr, SampliHr, dumpFileFolder)
 
 
+def economicsCitationLdaRun(K, BurninHr, SampliHr):
+    # dumpFileFolder = 'E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\'
+    dumpFileFolder = 'E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\'
+    print('[economics-citation-LDA]: loading economics')
+    ec = economics.getEconomicsCorpus()
+    print('[economics-citation-LDA]: indexing')
+    eidToId, idToEid = economics.getCitMetaGraphEidIdMapping(ec)
+    D = len(eidToId)
+    print('                       size: {0}'.format(D))
+    print('[economics-citation-LDA]: insert tuple (doc, wrd, cnt) to list')
+    data = economics.getCitMetaGraphDocWrdCntTupleLst(ec, eidToId, idToEid)
+    print('                       size: {0}'.format(len(data)))
+    '''running LDA'''
+    (postTheta, postPhi, topicWeights) = citationLdaRun(data, K, D, D, 1e-6, 1e-6, BurninHr, SampliHr, dumpFileFolder)
+
+
 if __name__ == '__main__':
     historicsCitationLdaRun(50, 3.5, 3.5)
+    # economicsCitationLdaRun(50, 3.5, 3.5)
 
     
 
