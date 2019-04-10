@@ -424,8 +424,8 @@ def economicsCitationLdaRun(K, BurninHr, SampliHr):
 
 
 if __name__ == '__main__':
-    historicsCitationLdaRun(50, 3.5, 3.5)
-    # economicsCitationLdaRun(50, 3.5, 3.5)
+    # historicsCitationLdaRun(50, 3.5, 3.5)
+    economicsCitationLdaRun(50, 0.5, 0.5)
 
     
 

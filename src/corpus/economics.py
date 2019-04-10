@@ -62,6 +62,7 @@ def readMetaFile(metaFilePath):
         title = toolkit.utility.rmLeadingStr(lines[2], 'title = ')
         year = toolkit.utility.parseNumVal(toolkit.utility.rmLeadingStr(lines[3], 'year = '))
         metaDict[Eid] = {'Eid': Eid, 'author': author, 'title': title, 'year': year}
+        print(metaDict[Eid])
     metaFile.close()
     return metaDict
 
@@ -308,6 +309,8 @@ if __name__ == '__main__':
     # ===========================================================================
     ed = getEconomicsCorpus()
     eidToId, idToEid = getCitMetaGraphEidIdMapping(ed)
+    print(idToEid[87944])
+    # print(ed.docs[87944]['title'])
     print(len(eidToId))
     d = getCitMetaGraphDocWrdCntTupleLst(ed, eidToId, idToEid)
     print(len(d))

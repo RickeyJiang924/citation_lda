@@ -28,32 +28,35 @@ ddd = dict()
 count = 1
 
 for item in results:
-    d[item[1]] = dict()
-    d[item[1]]['id'] = count
-    count += 1
-    d[item[1]]['sno'] = item[0]
-    d[item[1]]['title'] = item[1]
-    d[item[1]]['year'] = item[2]
-    d[item[1]]['author'] = ''
-    dd[item[0]] = item[1]
-    # print(item[0])
+    # 标题不为空
+    if len(item[1]) > 0:
+        d[item[1]] = dict()
+        d[item[1]]['id'] = count
+        count += 1
+        d[item[1]]['sno'] = item[0]
+        d[item[1]]['title'] = item[1]
+        d[item[1]]['year'] = item[2]
+        d[item[1]]['author'] = ''
+        dd[item[0]] = item[1]
+        # print(item[0])
 
 # 获取作者
 sql = "SELECT SNO,group_concat(ZZMC) from ci_lyzz group by sno"
 cursor.execute(sql)
 results = cursor.fetchall()
 for item in results:
-    if len(item[1]) < 1:
-        d[dd[item[0]]]['author'] = ''
-    else:
-        d[dd[item[0]]]['author'] = item[1]
+    if dd[item[0]] in d.keys():
+        if len(item[1]) < 1:
+            d[dd[item[0]]]['author'] = ''
+        else:
+            d[dd[item[0]]]['author'] = item[1]
 
 # 获取引文
 sql = "SELECT SNO,YWZZ,YWPM,YWND from ci_ywsy where YWLX='01'"
 cursor.execute(sql)
 results = cursor.fetchall()
 for item in results:
-    if item[2] not in d.keys():
+    if item[2] not in d.keys() and len(item[2]) > 1:
         d[item[2]] = dict()
         d[item[2]]['id'] = count
         count += 1
@@ -61,10 +64,10 @@ for item in results:
         d[item[2]]['author'] = item[1]
         d[item[2]]['title'] = item[2]
         d[item[2]]['year'] = item[3]
-    if d[dd[item[0]]]['id'] not in ddd.keys():
-        ddd[d[dd[item[0]]]['id']] = []
-    ddd[d[dd[item[0]]]['id']].append(d[item[2]]['id'])
-print(ddd[1])
+        if d[dd[item[0]]]['id'] not in ddd.keys():
+            ddd[d[dd[item[0]]]['id']] = []
+        ddd[d[dd[item[0]]]['id']].append(d[item[2]]['id'])
+# print(ddd[1])
 
 # f = open('E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\economics_metadata_file.txt', 'a+', encoding='utf-8')
 f = open('E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\economics_metadata_file.txt', 'a+', encoding='utf-8')
@@ -86,13 +89,6 @@ for item in ddd.keys():
         f.write('[]')
         f.write('\n')
         f.write('\n')
-
-
-
-# f.close()
-# except:
-#     print('failure...')
-#     print(sys.exc_info()[0])
 
 # 关闭数据库连接
 db.close()
