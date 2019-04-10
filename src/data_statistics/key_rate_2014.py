@@ -8,16 +8,16 @@ class KeyWordRate(object):
 
     def gengerate_KeyDict(self):
         dict_file_path = "E:/dict/seg2014.txt"
-        author_key_rate_2014_file_path = "author_key_rate_2014.txt"
-        venue_key_rate_2014_file_path = "venue_key_rate_2014.txt"
-        institution_key_rate_2014_file_path = "institution_key_rate_2014.txt"
+        author_key_rate_2014_file_path = "history2014_author"
+        venue_key_rate_2014_file_path = "history2014_venue"
+        institution_key_rate_2014_file_path = "history2014_institution"
         stop_word_file = open('E:/finalDesign/citation_lda/references/stopwords.txt', 'r', encoding='utf-8')
         stopwords = stop_word_file.read().splitlines()
         jieba.load_userdict(dict_file_path)
 
         # key_rate_file = open(key_rate_2014_file_path, 'w', encoding="utf-8")
 
-        db = pymysql.connect("localhost", "root", "czc489622czc", "history")
+        db = pymysql.connect("localhost", "root", "", "history")
         cursor = db.cursor()
         cursor2 = db.cursor()
         sql = "SELECT SNO,LYPM,QKNO,NIAN FROM ci_lysy14770"
