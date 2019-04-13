@@ -11,7 +11,7 @@ class Economics(object):
     numDocs = None
     metaDataFilePath = None
     citFilePath = None
-    citeMetaGraph = None
+    citMetaGraph = None
 
     def __init__(self, metaDataFilePath=None, citFilePath=None):
         self.docs = {}
@@ -32,15 +32,15 @@ class Economics(object):
         return
 
     def readCitationFile(self):
-        citeMetaGraph, citDict = readCitationFile(self.citFilePath)
-        self.citeMetaGraph = citeMetaGraph
+        citMetaGraph, citDict = readCitationFile(self.citFilePath)
+        self.citMetaGraph = citMetaGraph
         cnt = 0
         for Eid in citDict:
             if Eid in self.docs:
                 self.docs[Eid]['citLst'] = citDict[Eid]
                 cnt += 1
         print('[Economics] citations {0} entries (#citing paper)'.format(cnt))
-        print('[Economics] citing docs {0} (#edges)'.format(len(self.citeMetaGraph)))
+        print('[Economics] citing docs {0} (#edges)'.format(len(self.citMetaGraph)))
         # reportCiteMetaGraph(self.citeMetaGraph)
         return
 
@@ -68,13 +68,13 @@ def readMetaFile(metaFilePath):
 
 
 # ===============================================================================
-# (citeMetaGraph, citDict)
+# (citMetaGraph, citDict)
 # citDict[citingDocEid].append({'citingDocEid':citingDocEid, 'citedDocEid':citedDocEid, 'coCitedDocEidLst':coCitedDocEidLst, 'txt':txt})
 # ===============================================================================
 def readCitationFile(citationFilePath):
     citFile = open(citationFilePath, 'r', encoding='utf-8')
     citDict = {}
-    citeMetaGraph = {}
+    citMetaGraph = {}
     eof = False
     while not eof:
         (lines, eof) = toolkit.utility.readLines(4, citFile)
@@ -88,12 +88,12 @@ def readCitationFile(citationFilePath):
             citDict[citingDocEid] = []
         citDict[citingDocEid].append(
             {'citingDocEid': citingDocEid, 'citedDocEid': citedDocEid, 'coCitedDocEidLst': coCitedDocEidLst})
-        if citingDocEid not in citeMetaGraph:
-            citeMetaGraph[citingDocEid] = {}
-        if citedDocEid not in citeMetaGraph[citingDocEid]:
-            citeMetaGraph[citingDocEid][citedDocEid] = 0
-        citeMetaGraph[citingDocEid][citedDocEid] += 1
-    return citeMetaGraph, citDict
+        if citingDocEid not in citMetaGraph:
+            citMetaGraph[citingDocEid] = {}
+        if citedDocEid not in citMetaGraph[citingDocEid]:
+            citMetaGraph[citingDocEid][citedDocEid] = 0
+        citMetaGraph[citingDocEid][citedDocEid] += 1
+    return citMetaGraph, citDict
 
 # ===============================================================================
 # Economics Utility
@@ -105,12 +105,12 @@ titleReg = re.compile('title = (.*?)', re.MULTILINE)
 yearReg = re.compile('year = (.*?)', re.MULTILINE)
 
 
-def reportCiteMetaGraph(citeMetaGraph):
+def reportCiteMetaGraph(citMetaGraph):
     # citingDocHist = {}
     # citingCntHist = {}
-    # for citingDocId in citeMetaGraph:
-    #     citingDoc = len(citeMetaGraph[citingDocId])
-    #     citingCnt = sum(citeMetaGraph[citingDocId].values())
+    # for citingDocId in citMetaGraph:
+    #     citingDoc = len(citMetaGraph[citingDocId])
+    #     citingCnt = sum(citMetaGraph[citingDocId].values())
     #     if citingDoc not in citingDocHist: citingDocHist[citingDoc] = 0
     #     if citingCnt not in citingCntHist: citingCntHist[citingCnt] = 0
     #     citingDocHist[citingDoc] += 1
@@ -123,8 +123,8 @@ def reportCiteMetaGraph(citeMetaGraph):
     #         print('                          : {0:<20}{1:<20}{2:<20}'.format(i, citingDocHist.get(i, 0),
     #                                                                          citingCntHist.get(i, 0)))
     # return
-    for i in citeMetaGraph.keys():
-        print('i:', i, 'citing:', citeMetaGraph[i])
+    for i in citMetaGraph.keys():
+        print('i:', i, 'citing:', citMetaGraph[i])
 
 
 def generateMetaFile(sourceFilePath, metaFilePath):
@@ -194,8 +194,8 @@ def generateCitFile(citationFilePath, citFilePath):
 #                     citFilePath='E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\economics_citation_file.txt'):
 #     return Economics(metaDataFilePath, citFilePath)
 
-def getEconomicsCorpus(metaDataFilePath='E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\economics_metadata_file.txt',
-                    citFilePath='E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\economics_citation_file.txt'):
+def getEconomicsCorpus(metaDataFilePath='/Users/loohaze/Documents/GitHub/citation_lda/data/corpus_data/economics_metadata_file.txt',
+                    citFilePath='/Users/loohaze/Documents/GitHub/citation_lda/data/corpus_data/economics_citation_file.txt'):
     return Economics(metaDataFilePath, citFilePath)
 
 
@@ -206,12 +206,12 @@ def getCitMetaGraphEidIdMapping(ed):
     EidToId = {}
     idToEid = {}
     id = 0
-    for citingDocEid in ed.citeMetaGraph:
+    for citingDocEid in ed.citMetaGraph:
         if citingDocEid not in EidToId:
             EidToId[citingDocEid] = id
             idToEid[id] = citingDocEid
             id += 1
-        for citedDocEid in ed.citeMetaGraph[citingDocEid]:
+        for citedDocEid in ed.citMetaGraph[citingDocEid]:
             if citedDocEid not in EidToId:
                 EidToId[citedDocEid] = id
                 idToEid[id] = citedDocEid
@@ -221,10 +221,10 @@ def getCitMetaGraphEidIdMapping(ed):
 
 def getCitMetaGraphDocWrdCntTupleLst(ed, EidToId, idToEid):
     data = []
-    for citingDocEid in ed.citeMetaGraph:
-        for citedDocEid in ed.citeMetaGraph[citingDocEid]:
+    for citingDocEid in ed.citMetaGraph:
+        for citedDocEid in ed.citMetaGraph[citingDocEid]:
             data.append(
-                (EidToId[citingDocEid], EidToId[citedDocEid], ed.citeMetaGraph[citingDocEid][citedDocEid]))
+                (EidToId[citingDocEid], EidToId[citedDocEid], ed.citMetaGraph[citingDocEid][citedDocEid]))
     return data
 
 
