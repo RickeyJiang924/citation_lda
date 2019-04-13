@@ -12,13 +12,13 @@ def filterTokLst(tokLst):
 
 # 输入str 返回list
 def jiebaTokenize(sentence):
-    # stopwords_file = open('E:\\study\\PycharmProjects\\lda_project\\citation_lda\\references\\stopwords.txt', 'r',
-    #                       encoding='utf-8')
-    # eng_stopwords_file = open('E:\\study\\PycharmProjects\\lda_project\\citation_lda\\references\\eng_stopwords.txt',
-    #                           'r', encoding='utf-8')
-    stopwords_file = open('E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\references\\stopwords.txt', 'r', encoding='utf-8')
-    eng_stopwords_file = open('E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\references\\eng_stopwords.txt', 'r',
+    stopwords_file = open('E:\\study\\PycharmProjects\\lda_project\\citation_lda\\references\\stopwords.txt', 'r',
                           encoding='utf-8')
+    eng_stopwords_file = open('E:\\study\\PycharmProjects\\lda_project\\citation_lda\\references\\eng_stopwords.txt',
+                              'r', encoding='utf-8')
+    # stopwords_file = open('E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\references\\stopwords.txt', 'r', encoding='utf-8')
+    # eng_stopwords_file = open('E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\references\\eng_stopwords.txt', 'r',
+    #                       encoding='utf-8')
     stopwords = stopwords_file.read().split('\n')
     eng_stopwords = eng_stopwords_file.read().split('\n')
     results = ' '.join(jieba.cut(sentence)).split(' ')
@@ -57,20 +57,20 @@ def getTopicSummary(hd, eidToId, idToEid, ldaInstance, topDocCnt=20, topTokCnt=2
         topDocs = [(phiMatrix[k][d], 'unknownVenue', hd.docs[idToEid[d]]['title']) for d in topDocId]
 
         # 测试，分析前50篇文章的关键词
-        top50DocId = [d for d in sorted(range(ldaInstance.D), key=lambda x:phiMatrix[k][x], reverse=True)][0:50]
-        top50Docs = [(phiMatrix[k][d], hd.docs[idToEid[d]]['title']) for d in top50DocId]
-        top50Freq = {}
-        for item in top50Docs:
-            #  分词，过滤停用词
-            wordLst = filterTokLst(jiebaTokenize(item[1]))
-            for word in wordLst:
-                top50Freq[word] = top50Freq.get(word, 0.0) + item[0]
-        top50Tok = [t for t in sorted(top50Freq, key=lambda x: top50Freq[x], reverse=True)][0:topTokCnt]
-        topToks = [(top50Freq[tok], tok) for tok in top50Tok]
+        # top50DocId = [d for d in sorted(range(ldaInstance.D), key=lambda x:phiMatrix[k][x], reverse=True)][0:50]
+        # top50Docs = [(phiMatrix[k][d], hd.docs[idToEid[d]]['title']) for d in top50DocId]
+        # top50Freq = {}
+        # for item in top50Docs:
+        #     #  分词，过滤停用词
+        #     wordLst = filterTokLst(jiebaTokenize(item[1]))
+        #     for word in wordLst:
+        #         top50Freq[word] = top50Freq.get(word, 0.0) + 1
+        # top50Tok = [t for t in sorted(top50Freq, key=lambda x: top50Freq[x], reverse=True)][0:topTokCnt]
+        # topToks = [(tokExptFreq[tok], tok) for tok in top50Tok]
 
         # 所有文章关键词及概率
-        # topTokId = [t for t in sorted(tokExptFreq, key=lambda x:tokExptFreq[x], reverse=True)][0:topTokCnt]
-        # topToks = [(tokExptFreq[tok], tok) for tok in topTokId]
+        topTokId = [t for t in sorted(tokExptFreq, key=lambda x:tokExptFreq[x], reverse=True)][0:topTokCnt]
+        topToks = [(tokExptFreq[tok], tok) for tok in topTokId]
 
         # topVenueId = [venue for venue in sorted(venueDist, key=lambda x:venueDist[x], reverse=True)][0:topVenueCnt]
         # topVenues = [(venueDist[venue], venue) for venue in topVenueId]
@@ -132,9 +132,7 @@ if __name__ == '__main__':
     # print(jiebaTokenize(sentence))
 
     # lda.economicsCitationLdaRun(100, 3.5, 3.5)
+    economicsCitationLdaSummary('E:\\study\\PycharmProjects\\lda_project\\citation_lda\data\economics_citation_lda_50_546205_546205_1e-06_1e-06_timeCtrl_20_20.lda')
     # economicsCitationLdaSummary(
-    #     'E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\'
-    #     'economics_citation_lda_50_45895_45895_1e-06_1e-06_timeCtrl_3.5_3.5.lda')
-    economicsCitationLdaSummary(
-        'E:\\bigdata\PycharmWorkspace\\lda_project\\citation_lda\\data'
-        '\\economics_citation_lda_50_546205_546205_1e-06_1e-06_timeCtrl_0.5_0.5.lda')
+    #     'E:\\bigdata\PycharmWorkspace\\lda_project\\citation_lda\\data'
+    #     '\\economics_citation_lda_50_546205_546205_1e-06_1e-06_timeCtrl_0.5_0.5.lda')

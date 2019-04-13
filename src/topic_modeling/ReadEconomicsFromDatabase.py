@@ -69,8 +69,8 @@ for item in results:
         ddd[d[dd[item[0]]]['id']].append(d[item[2]]['id'])
 # print(ddd[1])
 
-# f = open('E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\economics_metadata_file.txt', 'a+', encoding='utf-8')
-f = open('E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\economics_metadata_file.txt', 'a+', encoding='utf-8')
+f = open('E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\economics_metadata_file.txt', 'a+', encoding='utf-8')
+# f = open('E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\economics_metadata_file.txt', 'a+', encoding='utf-8')
 for item in d.keys():
     if len(d[item]['title']) > 1:
         line = 'id = ' + str(d[item]['id']) + '\n' + 'author = ' + d[item]['author'] + '\n' + 'title = ' + d[item]['title'] + '\n' + 'year = ' + \
@@ -78,8 +78,8 @@ for item in d.keys():
         print(line, end='')
         f.write(line)
 
-# f = open('E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\economics_citation_file.txt', 'a+', encoding='utf-8')
-f = open('E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\economics_citation_file.txt', 'a+', encoding='utf-8')
+f = open('E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\economics_citation_file.txt', 'a+', encoding='utf-8')
+# f = open('E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\economics_citation_file.txt', 'a+', encoding='utf-8')
 for item in ddd.keys():
     for i in range(len(ddd[item])):
         f.write(str(item))

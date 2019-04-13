@@ -190,13 +190,13 @@ def generateCitFile(citationFilePath, citFilePath):
 # ===============================================================================
 # API
 # ===============================================================================
-def getEconomicsCorpus(metaDataFilePath='E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\economics_metadata_file.txt',
-                    citFilePath='E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\economics_citation_file.txt'):
-    return Economics(metaDataFilePath, citFilePath)
-
-# def getEconomicsCorpus(metaDataFilePath='E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\economics_metadata_file.txt',
-#                     citFilePath='E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\economics_citation_file.txt'):
+# def getEconomicsCorpus(metaDataFilePath='E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\economics_metadata_file.txt',
+#                     citFilePath='E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\economics_citation_file.txt'):
 #     return Economics(metaDataFilePath, citFilePath)
+
+def getEconomicsCorpus(metaDataFilePath='E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\economics_metadata_file.txt',
+                    citFilePath='E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\economics_citation_file.txt'):
+    return Economics(metaDataFilePath, citFilePath)
 
 
 # ===============================================================================

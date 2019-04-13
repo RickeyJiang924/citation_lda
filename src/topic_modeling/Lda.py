@@ -344,7 +344,7 @@ def dumpLdaEstimateFile(ldaInstance, dumpFilePath):
 
 def readLdaEstimateFile(dumpFilePath):
     print('[LDA-util]: read file from {0}'.format(dumpFilePath))
-    dumpFile = open(dumpFilePath, 'r')
+    dumpFile = open(dumpFilePath, 'r', encoding='utf-8')
     sys.stdout.write('\r[LDA-util]: read K, D, W                   ')
     sys.stdout.flush()
     K = toolkit.utility.parseNumVal(toolkit.utility.rmLeadingStr(dumpFile.readline(), 'K = '))
@@ -408,8 +408,8 @@ def historicsCitationLdaRun(K, BurninHr, SampliHr):
 
 
 def economicsCitationLdaRun(K, BurninHr, SampliHr):
-    # dumpFileFolder = 'E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\'
-    dumpFileFolder = 'E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\'
+    dumpFileFolder = 'E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\'
+    # dumpFileFolder = 'E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\'
     print('[economics-citation-LDA]: loading economics')
     ec = economics.getEconomicsCorpus()
     print('[economics-citation-LDA]: indexing')
@@ -425,7 +425,7 @@ def economicsCitationLdaRun(K, BurninHr, SampliHr):
 
 if __name__ == '__main__':
     # historicsCitationLdaRun(50, 3.5, 3.5)
-    economicsCitationLdaRun(50, 0.5, 0.5)
+    economicsCitationLdaRun(50, 20, 20)
 
     
 
