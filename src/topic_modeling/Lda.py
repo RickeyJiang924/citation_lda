@@ -383,7 +383,7 @@ def readLdaEstimateFile(dumpFilePath):
     return ldaInstance
 
 def citationLdaRun(data, K, D, W, alpha, beta, burninTimeHr, sampliTimeHr, dumpFileFolder):
-    dumpFilePath = os.path.join(dumpFileFolder, 'historics_citation_lda_{0}_{1}_{2}_{3}_{4}_{5}_{6}_{7}.lda'.format(K, D, W, alpha, beta, 'timeCtrl', burninTimeHr, sampliTimeHr))
+    dumpFilePath = os.path.join(dumpFileFolder, 'economics_citation_lda_{0}_{1}_{2}_{3}_{4}_{5}_{6}_{7}.lda'.format(K, D, W, alpha, beta, 'timeCtrl', burninTimeHr, sampliTimeHr))
     # toolkit.utility.removePath(dumpFilePath)
     ldaInstance = LDA(data, K, D, W, alpha, beta, burnTime=burninTimeHr, sampTime=sampliTimeHr, iterCtrl=False)
     (postTheta, postPhi, topicWeights) = ldaInstance.Mcmc()
@@ -425,7 +425,7 @@ def economicsCitationLdaRun(K, BurninHr, SampliHr):
 
 if __name__ == '__main__':
     # historicsCitationLdaRun(50, 3.5, 3.5)
-    economicsCitationLdaRun(50, 20, 20)
+    economicsCitationLdaRun(500, 8, 8)
 
     
 
