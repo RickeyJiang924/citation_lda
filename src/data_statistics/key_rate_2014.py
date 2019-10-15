@@ -7,21 +7,21 @@ import re
 class KeyWordRate(object):
 
     def gengerate_KeyDict(self):
-        dict_file_path = "E:/dict/history2013.txt"
-        author_key_rate_2014_file_path = "history2013_author"
-        venue_key_rate_2014_file_path = "history2013_venue"
-        institution_key_rate_2014_file_path = "history2013_institution"
+        dict_file_path = "E:/dict/seg2014.txt"
+        author_key_rate_2014_file_path = "history2014_author"
+        venue_key_rate_2014_file_path = "history2014_venue"
+        institution_key_rate_2014_file_path = "history2014_institution"
         stop_word_file = open('E:/finalDesign/citation_lda/references/stopwords.txt', 'r', encoding='utf-8')
         stopwords = stop_word_file.read().splitlines()
         jieba.load_userdict(dict_file_path)
 
         # key_rate_file = open(key_rate_2014_file_path, 'w', encoding="utf-8")
 
-        db = pymysql.connect("localhost", "root", "czc489622czc", "history")
+        db = pymysql.connect("localhost", "root", "", "history")
         cursor = db.cursor()
         cursor2 = db.cursor()
-        sql = "SELECT SNO,LYPM,QKNO,NIAN FROM ci_lysy13770"
-        sql2 = "SELECT ZZMC,JGMC FROM ci_lyzz13770 WHERE SNO=%s"
+        sql = "SELECT SNO,LYPM,QKNO,NIAN FROM ci_lysy14770"
+        sql2 = "SELECT ZZMC,JGMC FROM ci_lyzz14770 WHERE SNO=%s"
 
         authorDic = {}
         venueDict = {}
@@ -47,7 +47,7 @@ class KeyWordRate(object):
                     authors.append(author[0])
                     institutions.append(author[1])
 
-                title = re.sub("[\s+\.\!\/_,$%^*()+\"\']+|[+——！，。？、~@#￥%……&*（）《》°∑ –Œ≥µ∂«±œΩ・“”―]", "", title)
+                title = re.sub("[\s+\.\!\/_,$%^*()+\"\']+|[+——！，。？、~@#￥%……&*（）《》・“”―]", "", title)
                 split = list(jieba.cut(title, cut_all=False))
                 for each_split in split:
                     if each_split in stopwords:

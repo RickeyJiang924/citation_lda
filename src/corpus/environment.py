@@ -6,7 +6,7 @@ import toolkit.utility
 import re
 import os
 
-class Economics(object):
+class Environment(object):
     docs = None
     numDocs = None
     metaDataFilePath = None
@@ -28,7 +28,7 @@ class Economics(object):
             self.docs[Eid].update(metaDict[Eid])
             cnt += 1
         self.numDocs = len(self.docs)
-        print('[Economics] MetaData {0} entries (#Eid)'.format(cnt))
+        print('[Environment] MetaData {0} entries (#Eid)'.format(cnt))
         return
 
     def readCitationFile(self):
@@ -39,8 +39,8 @@ class Economics(object):
             if Eid in self.docs:
                 self.docs[Eid]['citLst'] = citDict[Eid]
                 cnt += 1
-        print('[Economics] citations {0} entries (#citing paper)'.format(cnt))
-        print('[Economics] citing docs {0} (#edges)'.format(len(self.citeMetaGraph)))
+        print('[Environment] citations {0} entries (#citing paper)'.format(cnt))
+        print('[Environment] citing docs {0} (#edges)'.format(len(self.citeMetaGraph)))
         # reportCiteMetaGraph(self.citeMetaGraph)
         return
 
@@ -96,7 +96,7 @@ def readCitationFile(citationFilePath):
     return citeMetaGraph, citDict
 
 # ===============================================================================
-# Economics Utility
+# Environment Utility
 # ===============================================================================
 #  从多行文本匹配 id = {...}  中的内容
 EidReg = re.compile('id = (.*?)', re.MULTILINE)
@@ -116,7 +116,7 @@ def reportCiteMetaGraph(citeMetaGraph):
     #     citingDocHist[citingDoc] += 1
     #     citingCntHist[citingCnt] += 1
     # m = max(max(citingDocHist.keys()), max(citingCntHist.keys()))
-    # print('[Economics Citing Meta Graph]: report:')
+    # print('[Environment Citing Meta Graph]: report:')
     # print('                          : {0:<20}{1:<20}{2:<20}'.format('i', 'citingDocHist[i]', 'citingCntHist[i]'))
     # for i in range(m):
     #     if (i in citingDocHist) or (i in citingCntHist):
@@ -172,8 +172,8 @@ def generateMetaFile(sourceFilePath, metaFilePath):
         metaFile.write('\n')
         cnt += 1
     metaFile.close()
-    print('[Economics-metadata] processing {0} docs'.format(cnt))
-    print('[Economics-metadata] Exception Doc: {0}'.format(exceptCnt))
+    print('[Environment-metadata] processing {0} docs'.format(cnt))
+    print('[Environment-metadata] Exception Doc: {0}'.format(exceptCnt))
     return
 
 
@@ -190,13 +190,13 @@ def generateCitFile(citationFilePath, citFilePath):
 # ===============================================================================
 # API
 # ===============================================================================
-# def getEconomicsCorpus(metaDataFilePath='E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\economics_metadata_file.txt',
-#                     citFilePath='E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\economics_citation_file.txt'):
-#     return Economics(metaDataFilePath, citFilePath)
+# def getEnvironmentCorpus(metaDataFilePath='E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\environment_metadata_file.txt',
+#                     citFilePath='E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\environment_citation_file.txt'):
+#     return Environment(metaDataFilePath, citFilePath)
 
-def getEconomicsCorpus(metaDataFilePath='E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\economic_data\\economics_metadata_file.txt',
-                    citFilePath='E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\economic_data\\economics_citation_file.txt'):
-    return Economics(metaDataFilePath, citFilePath)
+def getEnvironmentCorpus(metaDataFilePath='E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\environment_data\\environment_metadata_file.txt',
+                    citFilePath='E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\environment_data\\environment_citation_file.txt'):
+    return Environment(metaDataFilePath, citFilePath)
 
 
 # ===============================================================================
@@ -285,29 +285,29 @@ if __name__ == '__main__':
     # ===========================================================================
     # Generate the MetaDataFile
     # ===========================================================================
-    #    generateMetaFile(EconomicsFolderPathLst, metaDataFilePath)
+    #    generateMetaFile(EnvironmentFolderPathLst, metaDataFilePath)
 
     # ===========================================================================
     # Generate Citation File
     # ===========================================================================
-    #    generateCitFile(readMetaFile(metaDataFilePath), EconomicsCitContextFilePathLst, citFilePath)
+    #    generateCitFile(readMetaFile(metaDataFilePath), EnvironmentCitContextFilePathLst, citFilePath)
 
     # ===========================================================================
     # Generate Abstract File
     # ===========================================================================
-    #    generateAbstractDataset(EconomicsFolderPathLst)
+    #    generateAbstractDataset(EnvironmentFolderPathLst)
     #    generateAbstractFile(metaDataFilePath, citFilePath, absFilePath)
 
     # ===========================================================================
-    # Economics Corpus
+    # Environment Corpus
     # ===========================================================================
-    # his = Economics('E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\economics_metadata_file.txt',
-    #                     'E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\economics_citation_file.txt')
+    # his = Environment('E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\environment_metadata_file.txt',
+    #                     'E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\environment_citation_file.txt')
 
     # ===========================================================================
     # API Example
     # ===========================================================================
-    ed = getEconomicsCorpus()
+    ed = getEnvironmentCorpus()
     eidToId, idToEid = getCitMetaGraphEidIdMapping(ed)
     print(idToEid[87944])
     # print(ed.docs[87944]['title'])

@@ -5,7 +5,9 @@ import time
 import toolkit.utility
 import corpus.historics as historics
 import corpus.economics as economics
-
+import corpus.software as software
+import corpus.environment as environment
+import corpus.psychology as psychology
 
 class LDA(object):
     K = None
@@ -382,8 +384,9 @@ def readLdaEstimateFile(dumpFilePath):
     dumpFile.close()
     return ldaInstance
 
+# 不同主题需修改文件前缀
 def citationLdaRun(data, K, D, W, alpha, beta, burninTimeHr, sampliTimeHr, dumpFileFolder):
-    dumpFilePath = os.path.join(dumpFileFolder, 'historics_citation_lda_{0}_{1}_{2}_{3}_{4}_{5}_{6}_{7}.lda'.format(K, D, W, alpha, beta, 'timeCtrl', burninTimeHr, sampliTimeHr))
+    dumpFilePath = os.path.join(dumpFileFolder, 'psychology_citation_lda_{0}_{1}_{2}_{3}_{4}_{5}_{6}_{7}.lda'.format(K, D, W, alpha, beta, 'timeCtrl', burninTimeHr, sampliTimeHr))
     # toolkit.utility.removePath(dumpFilePath)
     ldaInstance = LDA(data, K, D, W, alpha, beta, burnTime=burninTimeHr, sampTime=sampliTimeHr, iterCtrl=False)
     (postTheta, postPhi, topicWeights) = ldaInstance.Mcmc()
@@ -408,7 +411,7 @@ def historicsCitationLdaRun(K, BurninHr, SampliHr):
 
 
 def economicsCitationLdaRun(K, BurninHr, SampliHr):
-    dumpFileFolder = 'E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\'
+    dumpFileFolder = 'E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\economic_data\\'
     # dumpFileFolder = 'E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\'
     print('[economics-citation-LDA]: loading economics')
     ec = economics.getEconomicsCorpus()
@@ -422,10 +425,75 @@ def economicsCitationLdaRun(K, BurninHr, SampliHr):
     '''running LDA'''
     (postTheta, postPhi, topicWeights) = citationLdaRun(data, K, D, D, 1e-6, 1e-6, BurninHr, SampliHr, dumpFileFolder)
 
+def softwareCitationLdaRun(K, BurninHr, SampliHr):
+    dumpFileFolder = 'E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\software_data\\'
+    # dumpFileFolder = 'E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\'
+    print('[software-citation-LDA]: loading software')
+    ec = software.getSoftwareCorpus()
+    print('[software-citation-LDA]: indexing')
+    eidToId, idToEid = software.getCitMetaGraphEidIdMapping(ec)
+    D = len(eidToId)
+    print('                       size: {0}'.format(D))
+    print('[software-citation-LDA]: insert tuple (doc, wrd, cnt) to list')
+    data = software.getCitMetaGraphDocWrdCntTupleLst(ec, eidToId, idToEid)
+    print('                       size: {0}'.format(len(data)))
+    '''running LDA'''
+    (postTheta, postPhi, topicWeights) = citationLdaRun(data, K, D, D, 1e-6, 1e-6, BurninHr, SampliHr,
+                                                        dumpFileFolder)
+
+def environmentCitationLdaRun(K, BurninHr, SampliHr):
+    dumpFileFolder = 'E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\environment_data\\'
+    # dumpFileFolder = 'E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\'
+    print('[environment-citation-LDA]: loading environment')
+    ec = environment.getEnvironmentCorpus()
+    print('[environment-citation-LDA]: indexing')
+    eidToId, idToEid = environment.getCitMetaGraphEidIdMapping(ec)
+    D = len(eidToId)
+    print('                       size: {0}'.format(D))
+    print('[environment-citation-LDA]: insert tuple (doc, wrd, cnt) to list')
+    data = environment.getCitMetaGraphDocWrdCntTupleLst(ec, eidToId, idToEid)
+    print('                       size: {0}'.format(len(data)))
+    '''running LDA'''
+    (postTheta, postPhi, topicWeights) = citationLdaRun(data, K, D, D, 1e-6, 1e-6, BurninHr, SampliHr,
+                                                        dumpFileFolder)
+
+def psychologyCitationLdaRun(K, BurninHr, SampliHr):
+    dumpFileFolder = 'E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\psychology_data\\'
+    # dumpFileFolder = 'E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\'
+    print('[psychology-citation-LDA]: loading psychology')
+    ec = psychology.getPsychologyCorpus()
+    print('[psychology-citation-LDA]: indexing')
+    eidToId, idToEid = psychology.getCitMetaGraphEidIdMapping(ec)
+    D = len(eidToId)
+    print('                       size: {0}'.format(D))
+    print('[psychology-citation-LDA]: insert tuple (doc, wrd, cnt) to list')
+    data = psychology.getCitMetaGraphDocWrdCntTupleLst(ec, eidToId, idToEid)
+    print('                       size: {0}'.format(len(data)))
+    '''running LDA'''
+    (postTheta, postPhi, topicWeights) = citationLdaRun(data, K, D, D, 1e-6, 1e-6, BurninHr, SampliHr,
+                                                        dumpFileFolder)
+
+def managementCitationLdaRun(K, BurninHr, SampliHr):
+    dumpFileFolder = 'E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\management_data\\'
+    # dumpFileFolder = 'E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\'
+    print('[management-citation-LDA]: loading management')
+    ec = psychology.getPsychologyCorpus()
+    print('[management-citation-LDA]: indexing')
+    eidToId, idToEid = psychology.getCitMetaGraphEidIdMapping(ec)
+    D = len(eidToId)
+    print('                       size: {0}'.format(D))
+    print('[management-citation-LDA]: insert tuple (doc, wrd, cnt) to list')
+    data = psychology.getCitMetaGraphDocWrdCntTupleLst(ec, eidToId, idToEid)
+    print('                       size: {0}'.format(len(data)))
+    '''running LDA'''
+    (postTheta, postPhi, topicWeights) = citationLdaRun(data, K, D, D, 1e-6, 1e-6, BurninHr, SampliHr,
+                                                        dumpFileFolder)
+
 
 if __name__ == '__main__':
     # historicsCitationLdaRun(50, 3.5, 3.5)
-    economicsCitationLdaRun(50, 20, 20)
-
-    
-
+    # economicsCitationLdaRun(100, 8, 8)
+    # softwareCitationLdaRun(50, 4, 4)
+    # environmentCitationLdaRun(50, 8, 8)
+    # psychologyCitationLdaRun(50, 8, 8)
+    managementCitationLdaRun(50, 12, 12)
