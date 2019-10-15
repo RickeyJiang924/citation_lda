@@ -1,10 +1,14 @@
 
 import theme_discovery.economics_based_method
+import theme_discovery.software_based_method
+import theme_discovery.psychology_based_method
 import toolkit.utility
 import toolkit.gexf
 import os.path
 import random
 import corpus.economics
+import corpus.software
+import corpus.psychology
 import math
 
 def getMatrixDominantEigenVec(m):
@@ -40,6 +44,8 @@ def getTopicCitationProb(citMatrix, topicSummaryDict, pmd):
     deltaYrDistDict = {}
     for citingPmid in pmd.citeMetaGraph:
         for citedPmid in pmd.citeMetaGraph[citingPmid]:
+            if citingPmid == 0:
+                continue
             deltaYr = pmd.docs[citingPmid]['year'] - pmd.docs[citedPmid]['year']
             if deltaYr > 300:
                 print(citingPmid, pmd.docs[citingPmid]['year'])
@@ -86,8 +92,8 @@ NOT_FOLD = True
 # API
 # ===============================================================================
 def dumpGraphFile(citMatrixFilePath, topicSummaryFilePath, edgeWeightThreshold, noSingleton=True, noBackwardEdge=True):
-    citMatrix = theme_discovery.economics_based_method.readCitMatrixSummary(citMatrixFilePath)
-    topicSummaryDict = theme_discovery.economics_based_method.readTopicSummary(topicSummaryFilePath)
+    citMatrix = theme_discovery.software_based_method.readCitMatrixSummary(citMatrixFilePath)
+    topicSummaryDict = theme_discovery.software_based_method.readTopicSummary(topicSummaryFilePath)
     #    (topicId, topicProb, topicYearMean, topicYearVar, topDocs, topToks, topVens)
     gexfFilePath = citMatrixFilePath.replace("_citMatrix", ".gexf")
     gexfGen = toolkit.gexf.GexfGen()
@@ -127,7 +133,7 @@ def dumpGraphFile(citMatrixFilePath, topicSummaryFilePath, edgeWeightThreshold, 
 def dumpVenRankingFile(topicSummaryFilePath):
     vensDictFilePath = topicSummaryFilePath.replace('_summary', '_venDict')
     vensDictFile = open(vensDictFilePath, 'w', encoding='utf-8')
-    topicSummaryDict = theme_discovery.economics_based_method.readTopicSummary(topicSummaryFilePath)
+    topicSummaryDict = theme_discovery.software_based_method.readTopicSummary(topicSummaryFilePath)
     vensDict = getVenueRanking(topicSummaryDict)
     for ven in sorted(vensDict, key=lambda x: vensDict[x], reverse=True):
         vensDictFile.write('[{0:.6f}]: {1}\n'.format(vensDict[ven], ven))
@@ -135,19 +141,22 @@ def dumpVenRankingFile(topicSummaryFilePath):
 
 
 def printVenEntropy(topicSummaryFilePath):
-    topicSummaryDict = theme_discovery.economics_based_method.readTopicSummary(topicSummaryFilePath)
+    topicSummaryDict = theme_discovery.software_based_method.readTopicSummary(topicSummaryFilePath)
     print(getVenueEntropy(topicSummaryDict))
 
 
 if __name__ == "__main__":
-    citMatrixFilePath = 'E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\history_data\\economics_citation_lda_50_546205_546205_1e-06_1e-06_timeCtrl_20_20.lda_citMatrix'
-    topicSummaryFilePath = 'E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\history_data\\economics_citation_lda_50_546205_546205_1e-06_1e-06_timeCtrl_20_20.lda_summary'
-    citMatrix = theme_discovery.economics_based_method.readCitMatrixSummary(citMatrixFilePath)
-    topicSummaryDict = theme_discovery.economics_based_method.readTopicSummary(topicSummaryFilePath)
-    eco = corpus.economics.getEconomicsCorpus()
+    # citMatrixFilePath = 'E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\economic_data\\economics_citation_lda_100_119670_119670_1e-06_1e-06_timeCtrl_8_8.lda_citMatrix'
+    # topicSummaryFilePath = 'E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\economic_data\\economics_citation_lda_100_119670_119670_1e-06_1e-06_timeCtrl_8_8.lda_summary'
+    citMatrixFilePath = 'E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\psychology_data\\psychology_citation_lda_50_87930_87930_1e-06_1e-06_timeCtrl_8_8.lda_citMatrix'
+    topicSummaryFilePath = 'E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\psychology_data\\psychology_citation_lda_50_87930_87930_1e-06_1e-06_timeCtrl_8_8.lda_summary'
+    citMatrix = theme_discovery.psychology_based_method.readCitMatrixSummary(citMatrixFilePath)
+    topicSummaryDict = theme_discovery.psychology_based_method.readTopicSummary(topicSummaryFilePath)
+    # eco = corpus.economics.getEconomicsCorpus()
+    # sco = corpus.software.getSoftwareCorpus()
+    psyco = corpus.psychology.getPsychologyCorpus()
+    getTopicCitationProb(citMatrix, topicSummaryDict, psyco)
 
-    getTopicCitationProb(citMatrix, topicSummaryDict, eco)
-
-    edgeWeightThreshold = 0.020000001
+    edgeWeightThreshold = 0.037541588662351036
     dumpGraphFile(citMatrixFilePath, topicSummaryFilePath, edgeWeightThreshold)
     pass

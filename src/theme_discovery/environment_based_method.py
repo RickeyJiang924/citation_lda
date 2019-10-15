@@ -3,12 +3,14 @@
 import re
 import sys
 import topic_modeling.Lda as lda
-import corpus.economics as economics
+import corpus.environment as environment
 import toolkit.utility as utility
 import jieba
 
+
 def filterTokLst(tokLst):
     return [tok for tok in tokLst if (len(tok) > 1)]
+
 
 # 输入str 返回list
 def jiebaTokenize(sentence):
@@ -30,6 +32,7 @@ def jiebaTokenize(sentence):
     # print(result)
     return result
 
+
 def getTopicSummary(hd, eidToId, idToEid, ldaInstance, topDocCnt=20, topTokCnt=20, topVenueCnt=20):
     phiMatrix = ldaInstance.phiEstimate
     topWeiVec = ldaInstance.topWeiEstimate
@@ -45,6 +48,8 @@ def getTopicSummary(hd, eidToId, idToEid, ldaInstance, topDocCnt=20, topTokCnt=2
         for d in range(ldaInstance.D):
             prob = phiMatrix[k][d]
             eid = idToEid[d]
+            if eid == 0:
+                break
             title = hd.docs[eid]['title']
             year = hd.docs[eid]['year']
             #  分词，过滤停用词
@@ -53,11 +58,11 @@ def getTopicSummary(hd, eidToId, idToEid, ldaInstance, topDocCnt=20, topTokCnt=2
                 tokExptFreq[tok] = tokExptFreq.get(tok, 0.0) + prob
             # venueDist[venue] = venueDist.get(venue, 0.0) + prob
             yearDist[year] = yearDist.get(year, 0.0) + prob
-        topDocId = [d for d in sorted(range(ldaInstance.D), key=lambda x:phiMatrix[k][x], reverse=True)][0:topDocCnt]
+        topDocId = [d for d in sorted(range(ldaInstance.D), key=lambda x: phiMatrix[k][x], reverse=True)][0:topDocCnt]
         topDocs = [(phiMatrix[k][d], 'unknownVenue', hd.docs[idToEid[d]]['title']) for d in topDocId]
 
         # 测试，分析前20篇文章的关键词
-        top20DocId = [d for d in sorted(range(ldaInstance.D), key=lambda x:phiMatrix[k][x], reverse=True)][0:20]
+        top20DocId = [d for d in sorted(range(ldaInstance.D), key=lambda x: phiMatrix[k][x], reverse=True)][0:10]
         top20Docs = [(phiMatrix[k][d], hd.docs[idToEid[d]]['title']) for d in top20DocId]
         top20Freq = {}
         for item in top20Docs:
@@ -79,15 +84,17 @@ def getTopicSummary(hd, eidToId, idToEid, ldaInstance, topDocCnt=20, topTokCnt=2
     print('')
     return topicSummary
 
+
 def dumpTopicSummary(topicSummary, dumpFilePath):
     print('[topic summary]: dump to file {0}'.format(dumpFilePath))
     dumpFile = open(dumpFilePath, 'w', encoding='utf-8')
-    for k in sorted(topicSummary, key=lambda k:topicSummary[k][2], reverse=True):
+    for k in sorted(topicSummary, key=lambda k: topicSummary[k][2], reverse=True):
         sys.stdout.write('\r[topic summary]: dump topic {0}'.format(k))
         sys.stdout.flush()
         (topToks, yearDist, topWei, topDocs) = topicSummary[k]
-        dumpFile.write('[Topic: {0}]:{1:.6f}  year={2:.6f}({3:.6f})\n'.format(k, topWei, utility.getDistExpectation(yearDist),
-                                                                              utility.getDistStd(yearDist)))
+        dumpFile.write(
+            '[Topic: {0}]:{1:.6f}  year={2:.6f}({3:.6f})\n'.format(k, topWei, utility.getDistExpectation(yearDist),
+                                                                   utility.getDistStd(yearDist)))
         for topDoc in topDocs:
             dumpFile.write('Doc:{0:.6f}:[{1:^20}]:{2}\n'.format(topDoc[0], topDoc[1], topDoc[2]))
         for topTok in topToks:
@@ -96,35 +103,40 @@ def dumpTopicSummary(topicSummary, dumpFilePath):
         dumpFile.write('\n')
     print('')
     dumpFile.close()
-    
+
+
 def dumpShortTopicSummary(topicSummary, dumpFilePath):
     print('[topic short summary]: dump to file {0}'.format(dumpFilePath))
     dumpFile = open(dumpFilePath, 'w')
-    for k in sorted(topicSummary, key=lambda k:topicSummary[k][2], reverse=True):
+    for k in sorted(topicSummary, key=lambda k: topicSummary[k][2], reverse=True):
         sys.stdout.write('\r[topic short summary]: dump topic {0}'.format(k))
         sys.stdout.flush()
         (topToks, yearDist, topWei, topDocs) = topicSummary[k]
-        dumpFile.write('[Topic: {0}]:{1:.6f}  year={2:.2f}({3:.2f}) '.format(k, topWei, utility.getDistExpectation(yearDist), utility.getDistStd(yearDist)))
+        dumpFile.write(
+            '[Topic: {0}]:{1:.6f}  year={2:.2f}({3:.2f}) '.format(k, topWei, utility.getDistExpectation(yearDist),
+                                                                  utility.getDistStd(yearDist)))
         for topTok in topToks: dumpFile.write('{0} '.format(topTok[1]))
         dumpFile.write('\n')
     print('')
     dumpFile.close()
 
-def economicsCitationLdaSummary(ldaFilePath):
-    print('[economics-citation-LDA] loading lda')
+
+def environmentCitationLdaSummary(ldaFilePath):
+    print('[environment-citation-LDA] loading lda')
     ldaInstance = lda.readLdaEstimateFile(ldaFilePath)
-    print('[economics-citation-LDA] loading economics')
-    hd = economics.getEconomicsCorpus()
-    print('[economics-citation-LDA] indexing')
-    eidToId, idToEid = economics.getCitMetaGraphEidIdMapping(hd)
-    print('[economics-citation-LDA] topic summary generation')
+    print('[environment-citation-LDA] loading environment')
+    hd = environment.getEnvironmentCorpus()
+    print('[environment-citation-LDA] indexing')
+    eidToId, idToEid = environment.getCitMetaGraphEidIdMapping(hd)
+    print('[environment-citation-LDA] topic summary generation')
     topicSummary = getTopicSummary(hd, eidToId, idToEid, ldaInstance, topDocCnt=10, topTokCnt=20)
-    print('[economics-citation-LDA] topic summary dump')
+    print('[environment-citation-LDA] topic summary dump')
     dumpTopicSummary(topicSummary, ldaFilePath + '_summary')
     # dumpShortTopicSummary(topicSummary, ldaFilePath + '_shortsummary')
     return
 
-def economicsCitationMatrix(ldaFilePath):
+
+def environmentCitationMatrix(ldaFilePath):
     print('[pubmed-citation-LDA]: loading lda')
     ldaInstance = lda.readLdaEstimateFile(ldaFilePath)
     citMatrix = getCitationMatrix(ldaInstance)
@@ -133,15 +145,16 @@ def economicsCitationMatrix(ldaFilePath):
     citMatrixFile.close()
     return
 
+
 def getCitationMatrix(ldaInstance):
     print('[citation matrix]: computing citation matrix')
     thetaMatrix = ldaInstance.thetaEstimate
     phiMatrix = ldaInstance.phiEstimate
     topicWeightVec = ldaInstance.topWeiEstimate
     citMatrix = [[0.0 for k1 in range(ldaInstance.K)] for k2 in range(ldaInstance.K)]
-    #===========================================================================
+    # ===========================================================================
     # P(c2 | c1) = sum_d phi_c1(d) theta_d(c2)
-    #===========================================================================
+    # ===========================================================================
     cnt = 0
     for d in range(ldaInstance.D):
         k1Lst = [k for k in range(ldaInstance.K) if phiMatrix[k][d] != 0.0]
@@ -152,6 +165,7 @@ def getCitationMatrix(ldaInstance):
         if d % 10 == 0: utility.printProgressBar(float(d) / ldaInstance.D)
     print('')
     return citMatrix
+
 
 def readTopicSummary(topicSummaryFilePath):
     topicLnRe = re.compile(r'\[Topic: (.*?)\]:(.*?)  year=(.*?)\((.*?)\)')
@@ -197,8 +211,10 @@ def readTopicSummary(topicSummaryFilePath):
                 ven = venLnReMatch.group(2).strip()
                 topVens.append((venProb, ven))
                 continue
-        if topicId is not None: topicSummaryDict[topicId] = (topicId, topicProb, topicYearMean, topicYearVar, topDocs, topToks, topVens)
+        if topicId is not None: topicSummaryDict[topicId] = (
+        topicId, topicProb, topicYearMean, topicYearVar, topDocs, topToks, topVens)
     return topicSummaryDict
+
 
 def readCitMatrixSummary(citMatrixFilePath):
     citMatrixFile = open(citMatrixFilePath, 'r')
@@ -212,13 +228,8 @@ if __name__ == '__main__':
     # print(jieba.lcut(sentence))
     # print(jiebaTokenize(sentence))
 
-    # lda.economicsCitationLdaRun(100, 3.5, 3.5)
-    # economicsCitationLdaSummary('E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\economic_data\\economics_citation_lda_100_119670_119670_1e-06_1e-06_timeCtrl_8_8.lda')
-    # economicsCitationLdaSummary(
-    #     'E:\\bigdata\PycharmWorkspace\\lda_project\\citation_lda\\data'
-    #     '\\economics_citation_lda_50_546205_546205_1e-06_1e-06_timeCtrl_0.5_0.5.lda')
-    # economicsCitationMatrix('E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\'
-    #                         'economics_citation_lda_50_546205_546205_1e-06_1e-06_timeCtrl_20_20.lda')
-    economicsCitationMatrix('E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\economic_data\\'
-                            'economics_citation_lda_100_119670_119670_1e-06_1e-06_timeCtrl_8_8.lda')
+    # lda.environmentCitationLdaRun(100, 3.5, 3.5)
+    environmentCitationLdaSummary('E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\environment_data\\environment_citation_lda_50_135710_135710_1e-06_1e-06_timeCtrl_8_8.lda')
+    # environmentCitationMatrix('E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\environment_data\\'
+    #                           'environment_citation_lda_50_135710_135710_1e-06_1e-06_timeCtrl_8_8.lda')
 

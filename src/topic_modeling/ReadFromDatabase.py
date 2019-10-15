@@ -15,7 +15,7 @@ cursor.execute('SET NAMES UTF8')
 cursor.execute(sql)
 
 # 获取论文标题、id
-sql = "SELECT SNO,LYPM,NIAN from ci_lysy where sno like '%F%'"
+sql = "SELECT SNO,LYPM,NIAN from ci_lysy where sno like '%C%'"
 cursor.execute(sql)
 results = cursor.fetchall()
 # 标题->基本信息
@@ -41,7 +41,7 @@ for item in results:
         # print(item[0])
 
 # 获取作者
-sql = "SELECT SNO,group_concat(ZZMC) from ci_lyzz where sno like '%F%' group by sno"
+sql = "SELECT SNO,group_concat(ZZMC) from ci_lyzz where sno like '%C%' group by sno"
 cursor.execute(sql)
 results = cursor.fetchall()
 for item in results:
@@ -52,7 +52,7 @@ for item in results:
             d[dd[item[0]]]['author'] = item[1]
 
 # 获取引文
-sql = "SELECT SNO,YWZZ,YWPM,YWND from ci_ywsy where YWLX='01' and sno like '%F%'"
+sql = "SELECT SNO,YWZZ,YWPM,YWND from ci_ywsy where YWLX='01' and sno like '%C%'"
 cursor.execute(sql)
 results = cursor.fetchall()
 for item in results:
@@ -69,7 +69,7 @@ for item in results:
         ddd[d[dd[item[0]]]['id']].append(d[item[2]]['id'])
 # print(ddd[1])
 
-f = open('E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\economic_data\\economics_metadata_file.txt', 'a+', encoding='utf-8')
+f = open('E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\environment_data\\environment_metadata_file.txt', 'a+', encoding='utf-8')
 # f = open('E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\economics_metadata_file.txt', 'a+', encoding='utf-8')
 for item in d.keys():
     if len(d[item]['title']) > 1:
@@ -78,7 +78,7 @@ for item in d.keys():
         print(line, end='')
         f.write(line)
 
-f = open('E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\economic_data\\economics_citation_file.txt', 'a+', encoding='utf-8')
+f = open('E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\environment_data\\environment_citation_file.txt', 'a+', encoding='utf-8')
 # f = open('E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\economics_citation_file.txt', 'a+', encoding='utf-8')
 for item in ddd.keys():
     for i in range(len(ddd[item])):
