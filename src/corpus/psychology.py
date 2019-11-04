@@ -308,11 +308,12 @@ if __name__ == '__main__':
     # API Example
     # ===========================================================================
     ed = getPsychologyCorpus()
-    eidToId, idToEid = getCitMetaGraphEidIdMapping(ed)
-    print(idToEid[87944])
-    # print(ed.docs[87944]['title'])
-    print(len(eidToId))
-    d = getCitMetaGraphDocWrdCntTupleLst(ed, eidToId, idToEid)
-    print(len(d))
+    print(ed.readCitationFile())
+    # eidToId, idToEid = getCitMetaGraphEidIdMapping(ed)
+    # print(idToEid[87944])
+    # # print(ed.docs[87944]['title'])
+    # print(len(eidToId))
+    # d = getCitMetaGraphDocWrdCntTupleLst(ed, eidToId, idToEid)
+    # print(len(d))
 
     pass

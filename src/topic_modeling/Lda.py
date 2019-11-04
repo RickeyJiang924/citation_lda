@@ -8,6 +8,9 @@ import corpus.economics as economics
 import corpus.software as software
 import corpus.environment as environment
 import corpus.psychology as psychology
+import corpus.management as management
+from corpus import finance
+
 
 class LDA(object):
     K = None
@@ -386,7 +389,7 @@ def readLdaEstimateFile(dumpFilePath):
 
 # 不同主题需修改文件前缀
 def citationLdaRun(data, K, D, W, alpha, beta, burninTimeHr, sampliTimeHr, dumpFileFolder):
-    dumpFilePath = os.path.join(dumpFileFolder, 'psychology_citation_lda_{0}_{1}_{2}_{3}_{4}_{5}_{6}_{7}.lda'.format(K, D, W, alpha, beta, 'timeCtrl', burninTimeHr, sampliTimeHr))
+    dumpFilePath = os.path.join(dumpFileFolder, 'finance_citation_lda_{0}_{1}_{2}_{3}_{4}_{5}_{6}_{7}.lda'.format(K, D, W, alpha, beta, 'timeCtrl', burninTimeHr, sampliTimeHr))
     # toolkit.utility.removePath(dumpFilePath)
     ldaInstance = LDA(data, K, D, W, alpha, beta, burnTime=burninTimeHr, sampTime=sampliTimeHr, iterCtrl=False)
     (postTheta, postPhi, topicWeights) = ldaInstance.Mcmc()
@@ -477,13 +480,29 @@ def managementCitationLdaRun(K, BurninHr, SampliHr):
     dumpFileFolder = 'E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\management_data\\'
     # dumpFileFolder = 'E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\'
     print('[management-citation-LDA]: loading management')
-    ec = psychology.getPsychologyCorpus()
+    ec = management.getManagementCorpus()
     print('[management-citation-LDA]: indexing')
-    eidToId, idToEid = psychology.getCitMetaGraphEidIdMapping(ec)
+    eidToId, idToEid = management.getCitMetaGraphEidIdMapping(ec)
     D = len(eidToId)
     print('                       size: {0}'.format(D))
     print('[management-citation-LDA]: insert tuple (doc, wrd, cnt) to list')
-    data = psychology.getCitMetaGraphDocWrdCntTupleLst(ec, eidToId, idToEid)
+    data = management.getCitMetaGraphDocWrdCntTupleLst(ec, eidToId, idToEid)
+    print('                       size: {0}'.format(len(data)))
+    '''running LDA'''
+    (postTheta, postPhi, topicWeights) = citationLdaRun(data, K, D, D, 1e-6, 1e-6, BurninHr, SampliHr,
+                                                        dumpFileFolder)
+
+def financeCitationLdaRun(K, BurninHr, SampliHr):
+    dumpFileFolder = 'E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\finance_data\\'
+    # dumpFileFolder = 'E:\\bigdata\\PycharmWorkspace\\lda_project\\citation_lda\\data\\'
+    print('[finance-citation-LDA]: loading finance')
+    ec = finance.getFinanceCorpus()
+    print('[finance-citation-LDA]: indexing')
+    eidToId, idToEid = finance.getCitMetaGraphEidIdMapping(ec)
+    D = len(eidToId)
+    print('                       size: {0}'.format(D))
+    print('[finance-citation-LDA]: insert tuple (doc, wrd, cnt) to list')
+    data = finance.getCitMetaGraphDocWrdCntTupleLst(ec, eidToId, idToEid)
     print('                       size: {0}'.format(len(data)))
     '''running LDA'''
     (postTheta, postPhi, topicWeights) = citationLdaRun(data, K, D, D, 1e-6, 1e-6, BurninHr, SampliHr,
@@ -492,8 +511,9 @@ def managementCitationLdaRun(K, BurninHr, SampliHr):
 
 if __name__ == '__main__':
     # historicsCitationLdaRun(50, 3.5, 3.5)
-    # economicsCitationLdaRun(100, 8, 8)
+    economicsCitationLdaRun(100, 6, 6)
     # softwareCitationLdaRun(50, 4, 4)
     # environmentCitationLdaRun(50, 8, 8)
     # psychologyCitationLdaRun(50, 8, 8)
-    managementCitationLdaRun(50, 12, 12)
+    # managementCitationLdaRun(20, 4, 4)
+    # financeCitationLdaRun(50, 10, 10)

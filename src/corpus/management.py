@@ -63,6 +63,7 @@ def readMetaFile(metaFilePath):
         year = toolkit.utility.parseNumVal(toolkit.utility.rmLeadingStr(lines[3], 'year = '))
         metaDict[Eid] = {'Eid': Eid, 'author': author, 'title': title, 'year': year}
         if Eid == 0:
+            print(Eid)
             print(metaDict[Eid])
     metaFile.close()
     return metaDict
@@ -310,7 +311,7 @@ if __name__ == '__main__':
     # ===========================================================================
     ma = getManagementCorpus()
     eidToId, idToEid = getCitMetaGraphEidIdMapping(ma)
-    sid = idToEid[0]
+    sid = idToEid[1000]
     title = ma.docs[sid]['title']
     print(title)
     # d = getCitMetaGraphDocWrdCntTupleLst(ed, eidToId, idToEid)

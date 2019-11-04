@@ -9,6 +9,7 @@ import random
 import corpus.economics
 import corpus.software
 import corpus.psychology
+import corpus.management
 import math
 
 def getMatrixDominantEigenVec(m):
@@ -148,15 +149,16 @@ def printVenEntropy(topicSummaryFilePath):
 if __name__ == "__main__":
     # citMatrixFilePath = 'E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\economic_data\\economics_citation_lda_100_119670_119670_1e-06_1e-06_timeCtrl_8_8.lda_citMatrix'
     # topicSummaryFilePath = 'E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\economic_data\\economics_citation_lda_100_119670_119670_1e-06_1e-06_timeCtrl_8_8.lda_summary'
-    citMatrixFilePath = 'E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\psychology_data\\psychology_citation_lda_50_87930_87930_1e-06_1e-06_timeCtrl_8_8.lda_citMatrix'
-    topicSummaryFilePath = 'E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\psychology_data\\psychology_citation_lda_50_87930_87930_1e-06_1e-06_timeCtrl_8_8.lda_summary'
+    citMatrixFilePath = 'E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\management_data\\management_citation_lda_20_5119_5119_1e-06_1e-06_timeCtrl_4_4.lda_citMatrix'
+    topicSummaryFilePath = 'E:\\study\\PycharmProjects\\lda_project\\citation_lda\\data\\management_data\\management_citation_lda_20_5119_5119_1e-06_1e-06_timeCtrl_4_4.lda_summary'
     citMatrix = theme_discovery.psychology_based_method.readCitMatrixSummary(citMatrixFilePath)
     topicSummaryDict = theme_discovery.psychology_based_method.readTopicSummary(topicSummaryFilePath)
     # eco = corpus.economics.getEconomicsCorpus()
     # sco = corpus.software.getSoftwareCorpus()
-    psyco = corpus.psychology.getPsychologyCorpus()
-    getTopicCitationProb(citMatrix, topicSummaryDict, psyco)
+    # psyco = corpus.psychology.getPsychologyCorpus()
+    manaco = corpus.management.getManagementCorpus()
+    getTopicCitationProb(citMatrix, topicSummaryDict, manaco)
 
-    edgeWeightThreshold = 0.037541588662351036
+    edgeWeightThreshold = 0.0500000152126348
     dumpGraphFile(citMatrixFilePath, topicSummaryFilePath, edgeWeightThreshold)
     pass
